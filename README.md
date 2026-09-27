@@ -37,6 +37,6 @@ Raccourcis clavier : `U` `D` `L` `R` `F` `B` (Shift = mouvement inverse).
 
 Développeur : **mebachirgueye-dev**
 
-Lien du site : **Mb05_**
+Lien du site : **https://mebachirgueye-dev.github.io/Rubik-s-Cube/**
 
 Ce projet et son code source sont protégés par le droit d’auteur. Toute reproduction, modification ou diffusion sans autorisation de l’auteur est interdite, sauf usage personnel.
