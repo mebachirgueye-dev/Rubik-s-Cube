@@ -33,8 +33,10 @@ Raccourcis clavier : `U` `D` `L` `R` `F` `B` (Shift = mouvement inverse).
 
 ---
 
-© 2026 Mb05_. Tous droits réservés.
+© 2026 mebachirgueye-dev . Tous droits réservés.
 
-Développeur : **Mb05_**
+Développeur : **mebachirgueye-dev**
+
+Lien du site : **Mb05_**
 
 Ce projet et son code source sont protégés par le droit d’auteur. Toute reproduction, modification ou diffusion sans autorisation de l’auteur est interdite, sauf usage personnel.
