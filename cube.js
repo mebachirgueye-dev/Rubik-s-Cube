@@ -30,6 +30,9 @@ const resetBtn = document.getElementById("resetBtn");
 const resetModal = document.getElementById("resetModal");
 const confirmResetBtn = document.getElementById("confirmResetBtn");
 const cancelResetBtn = document.getElementById("cancelResetBtn");
+const scrambleModal = document.getElementById("scrambleModal");
+const confirmScrambleBtn = document.getElementById("confirmScrambleBtn");
+const cancelScrambleBtn = document.getElementById("cancelScrambleBtn");
 
 const cubies = [];
 let orbitX = -22;
@@ -216,6 +219,63 @@ function renderMoves() {
   movesEl.textContent = moveLabels.join("  ");
 }
 
+function saveState() {
+  const state = {
+    orbitX,
+    orbitY,
+    history,
+    moveLabels,
+    cubies: cubies.map((cubie) => ({ pos: cubie.pos, rot: cubie.rot })),
+  };
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    // localStorage peut etre indisponible pour un fichier ouvert dans un contexte restreint.
+  }
+}
+
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved || !Array.isArray(saved.cubies) || saved.cubies.length !== cubies.length) return;
+
+    saved.cubies.forEach((savedCubie, index) => {
+      const cubie = cubies[index];
+      cubie.pos = { ...savedCubie.pos };
+      cubie.rot = savedCubie.rot.map((row) => [...row]);
+      applyCubieTransform(cubie);
+    });
+    if (Number.isFinite(saved.orbitX)) orbitX = saved.orbitX;
+    if (Number.isFinite(saved.orbitY)) orbitY = saved.orbitY;
+    history = Array.isArray(saved.history) ? saved.history : [];
+    moveLabels = Array.isArray(saved.moveLabels) ? saved.moveLabels : [];
+    renderMoves();
+    updateOrbit();
+  } catch (error) {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+function openResetModal() {
+  if (animating) return;
+  resetModal.hidden = false;
+  cancelResetBtn.focus();
+}
+
+function closeResetModal() {
+  resetModal.hidden = true;
+}
+
+function openScrambleModal() {
+  if (animating) return;
+  scrambleModal.hidden = false;
+  cancelScrambleBtn.focus();
+}
+
+function closeScrambleModal() {
+  scrambleModal.hidden = true;
+}
+
 function setBusy(busy) {
   animating = busy;
   scrambleBtn.disabled = busy;
@@ -264,6 +324,7 @@ function rotateLayer(axis, layer, dir, { record = true, duration = 220 } = {}) {
         history.push({ axis, layer, dir });
         moveLabels.push(moveName(axis, layer, dir));
         renderMoves();
+        saveState();
       }
       setBusy(false);
       resolve();
@@ -384,6 +445,7 @@ function onPointerMove(event) {
 
 function onPointerUp(event) {
   if (!drag || event.pointerId !== drag.pointerId) return;
+  if (drag.type === "orbit") saveState();
   drag = null;
   stageEl.classList.remove("dragging");
 }
@@ -421,6 +483,7 @@ function resetCube() {
   history = [];
   moveLabels = [];
   renderMoves();
+  saveState();
   undoBtn.disabled = true;
 }
 
@@ -430,6 +493,7 @@ async function undo() {
   moveLabels.pop();
   renderMoves();
   await rotateLayer(last.axis, last.layer, -last.dir, { record: false });
+  saveState();
 }
 
 const KEY_MOVES = {
@@ -449,7 +513,7 @@ window.addEventListener("keydown", (event) => {
   const key = event.key.toLowerCase();
   if (key === " ") {
     event.preventDefault();
-    scramble();
+    openScrambleModal();
     return;
   }
   const move = KEY_MOVES[key];
@@ -463,9 +527,30 @@ stageEl.addEventListener("pointerdown", onStagePointerDown);
 stageEl.addEventListener("pointermove", onPointerMove);
 stageEl.addEventListener("pointerup", onPointerUp);
 stageEl.addEventListener("pointercancel", onPointerUp);
-scrambleBtn.addEventListener("click", scramble);
-resetBtn.addEventListener("click", resetCube);
+scrambleBtn.addEventListener("click", openScrambleModal);
 undoBtn.addEventListener("click", undo);
+resetBtn.addEventListener("click", openResetModal);
+confirmResetBtn.addEventListener("click", () => {
+  resetCube();
+  closeResetModal();
+});
+cancelResetBtn.addEventListener("click", closeResetModal);
+resetModal.addEventListener("click", (event) => {
+  if (event.target === resetModal) closeResetModal();
+});
+confirmScrambleBtn.addEventListener("click", () => {
+  closeScrambleModal();
+  scramble();
+});
+cancelScrambleBtn.addEventListener("click", closeScrambleModal);
+scrambleModal.addEventListener("click", (event) => {
+  if (event.target === scrambleModal) closeScrambleModal();
+});
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !resetModal.hidden) closeResetModal();
+  if (event.key === "Escape" && !scrambleModal.hidden) closeScrambleModal();
+});
 
 buildCube();
-undoBtn.disabled = true;
+loadState();
+undoBtn.disabled = history.length === 0;

@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Rubik’s Cube 3D</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="logo.png" />
   </head>
   <body>
     <div class="app">
@@ -35,7 +37,13 @@
       </div>
 
       <p class="moves" id="moves" aria-live="polite"></p>
-      <p class="copyright">© 2026 Mb05_ — Tous droits réservés</p>
+      <p class="copyright">
+        <span>© 2026 mebachirgueye-dev · Tous droits réservés</span>
+        <a class="github-link" href="https://github.com/mebachirgueye-dev" target="_blank" rel="noopener noreferrer" aria-label="Visiter le profil GitHub de mebachirgueye-dev (nouvel onglet)">
+          <i class="fa fa-github" aria-hidden="true"></i>
+          <span>GitHub · mebachirgueye-dev</span>
+        </a>
+      </p>
     </div>
 
     <div class="modal" id="resetModal" hidden>
@@ -48,6 +56,16 @@
         <div class="modal-actions">
           <button type="button" id="cancelResetBtn" class="ghost">Annuler</button>
           <button type="button" id="confirmResetBtn">Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal" id="scrambleModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="scrambleTitle">
+        <h2 id="scrambleTitle">Mélanger le cube ?</h2>
+        <p>La position et l’historique actuels seront remplacés. Veux-tu continuer ?</p>
+        <div class="modal-actions">
+          <button type="button" id="cancelScrambleBtn" class="ghost">Annuler</button>
+          <button type="button" id="confirmScrambleBtn">Mélanger</button>
         </div>
       </div>
     </div>

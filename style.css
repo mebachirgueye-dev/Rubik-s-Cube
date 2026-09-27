@@ -12,6 +12,7 @@
   --size: 72px;
   --half: 36px;
   --step: 76px;
+  --cube-scale: 1;
 }
 
 * {
@@ -35,9 +36,12 @@ body {
 }
 
 .app {
-  height: 100%;
+  width: 100%;
+  height: 100dvh;
+  min-width: 0;
   display: grid;
-  grid-template-rows: auto 1fr auto auto auto;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
 }
 
 .topbar {
@@ -90,17 +94,30 @@ h1 {
   position: absolute;
   left: 50%;
   top: calc(50% + 132px);
-  width: 280px;
-  height: 46px;
+  width: min(310px, 90vw);
+  height: 58px;
   transform: translateX(-50%);
   background: radial-gradient(
     ellipse at center,
-    rgba(15, 18, 24, 0.32) 0%,
-    rgba(15, 18, 24, 0.14) 42%,
-    transparent 72%
+    rgba(15, 18, 24, 0.2) 0%,
+    rgba(15, 18, 24, 0.11) 34%,
+    rgba(15, 18, 24, 0.035) 58%,
+    transparent 76%
   );
-  filter: blur(6px);
+  filter: blur(8px);
   pointer-events: none;
+}
+
+.cube-shadow::after {
+  content: "";
+  position: absolute;
+  left: 25%;
+  top: 40%;
+  width: 50%;
+  height: 28%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(15, 18, 24, 0.16), transparent 72%);
+  filter: blur(3px);
 }
 
 .cube,
@@ -113,6 +130,7 @@ h1 {
   position: relative;
   width: 0;
   height: 0;
+  scale: var(--cube-scale);
 }
 
 .pivot {
@@ -218,10 +236,38 @@ button:disabled {
 }
 
 .copyright {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   color: var(--muted);
   font-size: 12px;
   padding-bottom: 16px;
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.github-link .fa-github {
+  font-size: 20px;
+}
+
+.github-link:hover {
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.github-link:focus-visible {
+  border-radius: 3px;
+  outline: 2px solid var(--blue);
+  outline-offset: 4px;
 }
 
 .modal {
@@ -265,13 +311,57 @@ button:disabled {
 }
 
 @media (max-width: 720px) {
+  :root {
+    --cube-scale: 0.9;
+  }
+
   .topbar {
     flex-direction: column;
     align-items: start;
+    gap: 8px;
     padding: 18px 18px 0;
   }
 
   .hint {
+    max-width: 100%;
     text-align: left;
+  }
+
+  .dock {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px 12px;
+  }
+
+  .dock button {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .cube-shadow {
+    top: calc(50% + 122px);
+    width: min(270px, 82vw);
+    height: 50px;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --cube-scale: 0.82;
+  }
+
+  .dock button {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .topbar {
+    padding-inline: 14px;
+  }
+
+  .cube-shadow {
+    top: calc(50% + 108px);
+    width: min(250px, 78vw);
+    height: 46px;
   }
 }
