@@ -1,0 +1,277 @@
+:root {
+  --bg: #ffffff;
+  --text: #17191f;
+  --muted: #5c6473;
+  --plastic: #141414;
+  --white: #f3f3f3;
+  --yellow: #f6d44a;
+  --red: #d23b2f;
+  --orange: #ef7a1a;
+  --blue: #2f62d6;
+  --green: #2f9e4f;
+  --size: 72px;
+  --half: 36px;
+  --step: 76px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+}
+
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto auto;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: end;
+  padding: 24px 32px 0;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+
+.hint {
+  max-width: 340px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.stage {
+  position: relative;
+  cursor: grab;
+}
+
+.stage.dragging {
+  cursor: grabbing;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  perspective: 1200px;
+  display: grid;
+  place-items: center;
+}
+
+.cube-shadow {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 132px);
+  width: 280px;
+  height: 46px;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(15, 18, 24, 0.32) 0%,
+    rgba(15, 18, 24, 0.14) 42%,
+    transparent 72%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.cube,
+.pivot,
+.cubie {
+  transform-style: preserve-3d;
+}
+
+.cube {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.pivot {
+  position: absolute;
+  inset: 0;
+}
+
+.cubie {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  left: calc(var(--size) / -2);
+  top: calc(var(--size) / -2);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background: var(--plastic);
+  box-shadow: inset 0 0 0 4px var(--plastic);
+}
+
+.sticker {
+  position: absolute;
+  inset: 6px;
+  border-radius: 8px;
+  background: var(--plastic);
+}
+
+.sticker.white {
+  background: linear-gradient(160deg, #fff, var(--white));
+}
+.sticker.yellow {
+  background: linear-gradient(160deg, #ffe789, var(--yellow));
+}
+.sticker.red {
+  background: linear-gradient(160deg, #ff6a5c, var(--red));
+}
+.sticker.orange {
+  background: linear-gradient(160deg, #ffb056, var(--orange));
+}
+.sticker.blue {
+  background: linear-gradient(160deg, #6b93ff, var(--blue));
+}
+.sticker.green {
+  background: linear-gradient(160deg, #59d07a, var(--green));
+}
+
+.face.f {
+  transform: translateZ(var(--half));
+}
+.face.b {
+  transform: rotateY(180deg) translateZ(var(--half));
+}
+.face.r {
+  transform: rotateY(90deg) translateZ(var(--half));
+}
+.face.l {
+  transform: rotateY(-90deg) translateZ(var(--half));
+}
+.face.u {
+  transform: rotateX(90deg) translateZ(var(--half));
+}
+.face.d {
+  transform: rotateX(-90deg) translateZ(var(--half));
+}
+
+.dock {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 24px 12px;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 22px;
+  background: #17191f;
+  color: #fff;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+button.ghost {
+  background: #eef0f4;
+  color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.moves {
+  min-height: 28px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.copyright {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding-bottom: 16px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 18, 24, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  z-index: 20;
+}
+
+.modal[hidden] {
+  display: none;
+}
+
+.modal-card {
+  width: min(420px, 100%);
+  background: #fff;
+  color: var(--text);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(15, 18, 24, 0.22);
+}
+
+.modal-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.modal-card p {
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    flex-direction: column;
+    align-items: start;
+    padding: 18px 18px 0;
+  }
+
+  .hint {
+    text-align: left;
+  }
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rubik’s Cube 3D</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Cube 3×3</p>
+          <h1>Rubik’s Cube</h1>
+        </div>
+        <p class="hint">
+          Glisse une pastille pour tourner une face. Glisse le fond pour faire
+          pivoter le cube.
+        </p>
+      </header>
+
+      <div class="stage" id="stage">
+        <div class="scene">
+          <div class="cube-shadow" aria-hidden="true"></div>
+          <div class="cube" id="cube">
+            <div class="pivot" id="pivot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dock">
+        <button type="button" id="scrambleBtn">Mélanger</button>
+        <button type="button" id="undoBtn">Annuler</button>
+        <button type="button" id="resetBtn" class="ghost">Réinitialiser</button>
+      </div>
+
+      <p class="moves" id="moves" aria-live="polite"></p>
+      <p class="copyright">© 2026 Mb05_ — Tous droits réservés</p>
+    </div>
+
+    <div class="modal" id="resetModal" hidden>
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+        <h2 id="resetTitle">Réinitialiser le cube ?</h2>
+        <p>
+          La position actuelle sera perdue. Es-tu sûr de vouloir remettre le
+          cube à l’état résolu ?
+        </p>
+        <div class="modal-actions">
+          <button type="button" id="cancelResetBtn" class="ghost">Annuler</button>
+          <button type="button" id="confirmResetBtn">Réinitialiser</button>
+        </div>
+      </div>
+    </div>
+    <script src="cube.js"></script>
+  </body>
+</html>
